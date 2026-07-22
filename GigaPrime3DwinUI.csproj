@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>GigaPrime3DwinUI</RootNamespace>
+    <AssemblyName>GigaPrime3DwinUI</AssemblyName>
+    <Version>11.0.0.2</Version>
+    <AssemblyVersion>11.0.0.2</AssemblyVersion>
+    <FileVersion>11.0.0.2</FileVersion>
+    <Product>GigaPrime3D WinUI v11 Demo</Product>
+    <UseWinUI>true</UseWinUI>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x64;ARM64;AnyCPU</Platforms>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <!-- Unpackaged (no MSIX) so it F5 / dotnet run's like the other WinUI samples. -->
+    <WindowsPackageType>None</WindowsPackageType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1701;1702;MSB3305;CA1416</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="2.2.1" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Runtime" Version="2.2.0" />
+    <!-- HeightMap.cs decodes .png height maps via System.Drawing.Bitmap. -->
+    <PackageReference Include="System.Drawing.Common" Version="9.*" />
+  </ItemGroup>
+
+  <!-- ProEssentials v11 WinUI chart from NuGet, so this repo is clone and run with no local
+       install. The AnyCpu package embeds the native engines and unpacks the one matching the
+       running process, so there is no PEGRP DLL to copy. It also carries
+       Gigasoft.ProEssentialsWinUI.pri; the WinUI control templates live there, and without it
+       the chart renders NOTHING while every event still fires and nothing throws. -->
+  <ItemGroup>
+    <PackageReference Include="ProEssentials.Chart.Net10.WinUI" Version="11.*" />
+  </ItemGroup>
+
+  <!-- Demo heightmap/image data flattened to the output root (example loads by bare filename)
+       from a single data\ source folder, matching PewinUIDemo. TargetPath does the flatten. -->
+  <ItemGroup>
+    <Content Include="data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+    </Content>
+  </ItemGroup>
+
+</Project>
